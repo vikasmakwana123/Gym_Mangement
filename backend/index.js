@@ -1,45 +1,41 @@
 import express from "express";
-import dotenv from "dotenv";
 import cors from "cors";
-import multer from "multer";
+import dotenv from "dotenv";
 import authRoutes from "./routes/auth.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
+import subscriptionRoutes from "./routes/subscription.routes.js";
+import notificationRoutes from "./routes/notification.routes.js";
+import orderRoutes from "./routes/order.routes.js";
+import dietRoutes from "./routes/diet.routes.js";
+import { initializeCronJobs } from "./jobs/cronJobs.js";
+
+dotenv.config();
 
 const app = express();
-dotenv.config();
-app.use(cors());
+const PORT = process.env.PORT || 3000;
 
-// ✅ Parse JSON bodies
+// Middleware
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/"); // folder where images will be stored
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname); // unique filename
-  },
-});
-const upload = multer({ storage });
+// Routes
+app.use("/auth", authRoutes);
+app.use("/admin", adminRoutes);
+app.use("/subscription", subscriptionRoutes);
+app.use("/notifications", notificationRoutes);
+app.use("/orders", orderRoutes);
+app.use("/diet", dietRoutes);
 
-// Example route for image upload
-app.post("/upload", upload.single("image"), (req, res) => {
-  res.json({
-    message: "Image uploaded successfully",
-    file: req.file,
-  });
-});
-
-const PORT = process.env.PORT || 3000;
-
+// Test route
 app.get("/", (req, res) => {
-  res.send("Gym Management Backend is running");
+  res.json({ message: "Gym Management API is running" });
 });
 
-// ✅ Your existing routes
-app.use(authRoutes);
-
+// Start server
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`✅ Server is running on http://localhost:${PORT}`);
+  
+  // Initialize cron jobs for automated expiry checking
+  initializeCronJobs();
 });
