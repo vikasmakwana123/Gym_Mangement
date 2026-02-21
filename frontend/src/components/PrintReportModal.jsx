@@ -14,16 +14,16 @@ const PrintReportModal = ({ isOpen, onClose, adminIdToken }) => {
   const fetchStats = async () => {
     setLoading(true);
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+      const apiUrl = import.meta.env.VITE_API_URL;
       console.log("Fetching stats from:", `${apiUrl}/admin/stats`);
-      
+
       const response = await axios.get(
         `${apiUrl}/admin/stats`,
-        { 
-          headers: { 
+        {
+          headers: {
             Authorization: `Bearer ${adminIdToken}`,
             "Content-Type": "application/json"
-          } 
+          }
         }
       );
       console.log("Stats response:", response.data);

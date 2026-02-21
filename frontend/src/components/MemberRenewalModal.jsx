@@ -19,7 +19,7 @@ const MemberRenewalModal = ({ member, onClose, onRenewalSuccess, adminIdToken })
       setError("");
 
       const response = await axios.put(
-        `http://localhost:3000/admin/members/${member.uid}/renew`,
+        `${import.meta.env.VITE_API_URL}/admin/members/${member.uid}/renew`,
         { packageType: selectedPackage },
         {
           headers: {
