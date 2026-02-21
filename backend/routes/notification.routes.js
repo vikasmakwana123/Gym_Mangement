@@ -7,13 +7,10 @@ import {
 
 const router = express.Router();
 
-// Get all notifications
 router.get("/", getAllNotifications);
 
-// Add new notification (Admin only)
 router.post("/add", addNotification);
 
-// Delete notification (Admin only)
 router.delete("/:notificationId", deleteNotification);
 
 export default router;

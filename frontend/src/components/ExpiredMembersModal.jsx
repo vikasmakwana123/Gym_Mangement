@@ -28,7 +28,6 @@ const ExpiredMembersModal = ({ isOpen, onClose, adminIdToken }) => {
 
       const allMembers = response.data.members || [];
       
-      // Filter expired members
       const expired = allMembers.filter((member) => {
         if (!member.expiryDate) return false;
         const expiry = new Date(member.expiryDate);

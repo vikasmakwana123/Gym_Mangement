@@ -1,12 +1,9 @@
-/**
- * Email utility for sending membership notifications
- */
+
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-// Create email transporter
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -15,13 +12,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-/**
- * Send membership expiry notification email
- * @param {string} email - Recipient email address
- * @param {string} name - Recipient name
- * @param {string} packageType - The membership package type
- * @returns {Promise} Email send result
- */
 export const sendMembershipExpiryEmail = async (email, name, packageType) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
@@ -88,14 +78,6 @@ export const sendMembershipExpiryEmail = async (email, name, packageType) => {
   }
 };
 
-/**
- * Send membership renewal reminder email (before expiry)
- * @param {string} email - Recipient email address
- * @param {string} name - Recipient name
- * @param {string} packageType - The membership package type
- * @param {number} daysRemaining - Days remaining before expiry
- * @returns {Promise} Email send result
- */
 export const sendReminderEmail = async (email, name, packageType, daysRemaining) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,

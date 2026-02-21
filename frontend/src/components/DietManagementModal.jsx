@@ -75,10 +75,8 @@ const DietManagementModal = ({ isOpen, onClose, adminIdToken }) => {
       setEditingMemberId(null);
       setSelectedMemberId(null);
 
-      // Refresh members list
       await fetchMembers();
 
-      // Clear success message after 3 seconds
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
       console.error("Error saving diet:", err);
@@ -170,7 +168,7 @@ const DietManagementModal = ({ isOpen, onClose, adminIdToken }) => {
         )}
 
         {editingMemberId ? (
-          // Diet editing form
+          
           <div style={{ backgroundColor: "#f9f9f9", padding: "20px", borderRadius: "8px" }}>
             <h3 style={{ marginTop: 0 }}>
               Edit Diet for{" "}
@@ -241,7 +239,7 @@ const DietManagementModal = ({ isOpen, onClose, adminIdToken }) => {
             </div>
           </div>
         ) : (
-          // Members list
+          
           <div>
             {loading && members.length === 0 ? (
               <div style={{ textAlign: "center", padding: "20px", color: "#666" }}>

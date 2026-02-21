@@ -4,7 +4,7 @@ import NotificationsPanel from "../components/NotificationsPanel";
 const Gym_HomePage = () => {
   return (
     <div className="w-full overflow-x-hidden">
-      {/* Hero Section */}
+      {}
       <div className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] w-full">
         <img
           src="/gym_homepage.jpg"
@@ -12,7 +12,7 @@ const Gym_HomePage = () => {
           className="w-full h-full object-cover"
         />
 
-        {/* Bottom Center Heading */}
+        {}
         <h1 className="absolute bottom-6 left-1/2 -translate-x-1/2 
           text-2xl sm:text-3xl md:text-5xl 
           font-bold text-amber-50 bg-black/60 
@@ -22,7 +22,7 @@ const Gym_HomePage = () => {
         </h1>
       </div>
 
-      {/* About Section */}
+      {}
       <section className="py-10 sm:py-12 px-4 sm:px-6 text-center">
         <h2 className="text-2xl sm:text-3xl font-semibold mb-4">
           Why Choose VM Fitness?
@@ -35,7 +35,7 @@ const Gym_HomePage = () => {
         </p>
       </section>
 
-      {/* Features Section */}
+      {}
       <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 
         gap-6 px-4 sm:px-6 bg-gray-100 pb-12">
         
@@ -86,14 +86,14 @@ const Gym_HomePage = () => {
         </div>
       </section>
 
-      {/* Notifications Section */}
+      {}
       <section className="py-10 sm:py-12 px-4 sm:px-6 bg-gray-100">
         <div className="max-w-3xl mx-auto">
           <NotificationsPanel />
         </div>
       </section>
 
-      {/* Footer */}
+      {}
       <footer className="bg-gray-100 text-black border-t-gray-200 border-t-2 text-center py-6 text-sm sm:text-base">
         <p>&copy; {new Date().getFullYear()} VM Fitness. All rights reserved.</p>
       </footer>

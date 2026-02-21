@@ -14,12 +14,10 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
 app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes);
 app.use("/subscription", subscriptionRoutes);
@@ -27,15 +25,12 @@ app.use("/notifications", notificationRoutes);
 app.use("/orders", orderRoutes);
 app.use("/diet", dietRoutes);
 
-// Test route
 app.get("/", (req, res) => {
   res.json({ message: "Gym Management API is running" });
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`✅ Server is running on http://localhost:${PORT}`);
   
-  // Initialize cron jobs for automated expiry checking
   initializeCronJobs();
 });

@@ -1,4 +1,4 @@
-/* Membership Status Styles */
+
 
 .membership-status-container {
   width: 100%;
@@ -209,7 +209,7 @@
   box-shadow: 0 8px 16px rgba(243, 156, 18, 0.4);
 }
 
-/* Renewal Modal */
+
 .renewal-options-container {
   position: fixed;
   top: 0;
@@ -379,7 +379,7 @@
   margin-bottom: 0;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
   .membership-card {
     padding: 20px;

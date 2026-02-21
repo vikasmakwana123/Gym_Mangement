@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import "../styles/PackageSelection.css";
 
-/**
- * PackageSelection Component
- * Displays available gym membership packages for user selection
- */
 const PackageSelection = ({ onPackageSelect, selectedPackage = "basic" }) => {
   const packages = [
     {
@@ -138,7 +134,7 @@ const PackageSelection = ({ onPackageSelect, selectedPackage = "basic" }) => {
           </div>
         ))}
 
-        {/* Test Package - Usually hidden in production */}
+        {}
         <details className="test-package-details" style={{ marginTop: "20px" }}>
           <summary style={{ cursor: "pointer", color: "#666" }}>
             Developer: Show Test Package (3 min)

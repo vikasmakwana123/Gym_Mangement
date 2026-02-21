@@ -1,6 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
 
-// Create context
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
@@ -8,7 +7,6 @@ export const CartProvider = ({ children }) => {
   const [confirmedOrder, setConfirmedOrder] = useState(null);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
-  // Debounce API call when cart updates
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (cart.length > 0) {
@@ -16,13 +14,13 @@ export const CartProvider = ({ children }) => {
       }
     }, 2000); 
 
-    return () => clearTimeout(timeout); // cleanup
+    return () => clearTimeout(timeout); 
   }, [cart]);
 
   const addToCart = (item) => {
     console.log("Adding to cart:", item);
     setCart((prev) => {
-      // Use item.id (from Firestore doc.id) for comparison, not _id
+      
       const existingItem = prev.find((cartItem) => cartItem.id === item.id);
       if (existingItem) {
         console.log("Product already in cart, updating quantity");
@@ -95,4 +93,3 @@ export const CartProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
-

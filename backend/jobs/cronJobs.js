@@ -1,7 +1,4 @@
-/**
- * Cron Jobs for automated membership expiry checking
- * Runs scheduled tasks to process expired memberships and send reminders
- */
+
 import cron from "node-cron";
 import { db } from "../firebase.js";
 import { sendMembershipExpiryEmail, sendReminderEmail } from "../utils/emailUtils.js";
@@ -10,20 +7,14 @@ import {
   getDaysRemaining,
 } from "../utils/packageUtils.js";
 
-/**
- * Initialize all cron jobs
- * Call this function in your main server file (index.js)
- */
 export const initializeCronJobs = () => {
   console.log("📅 Initializing cron jobs...");
 
-  // Run expiry check every day at 2:00 AM
   cron.schedule("0 2 * * *", async () => {
     console.log("🔔 Running daily expiry check...");
     await checkAndProcessExpiredMemberships();
   });
 
-  // Send reminders every day at 9:00 AM
   cron.schedule("0 9 * * *", async () => {
     console.log("📧 Sending renewal reminders...");
     await sendRemindersToExpiringMembers();
@@ -32,10 +23,6 @@ export const initializeCronJobs = () => {
   console.log("✅ Cron jobs initialized successfully");
 };
 
-/**
- * Check and process expired memberships
- * Archives expired members and sends notification emails
- */
 export const checkAndProcessExpiredMemberships = async () => {
   try {
     const membersSnapshot = await db.collection("members").get();
@@ -47,10 +34,9 @@ export const checkAndProcessExpiredMemberships = async () => {
 
       if (!member.expiryDate) continue;
 
-      // Check if membership has expired
       if (isMembershipExpired(member.expiryDate)) {
         try {
-          // Move to archived collection
+          
           await db.collection("expiredMembers").doc(doc.id).set({
             ...member,
             archivedAt: new Date().toISOString(),
@@ -58,13 +44,11 @@ export const checkAndProcessExpiredMemberships = async () => {
             status: "expired",
           });
 
-          // Update member status to expired
           await db.collection("members").doc(doc.id).update({
             status: "expired",
             expiryProcessedAt: new Date().toISOString(),
           });
 
-          // Send expiry email
           if (member.email) {
             try {
               await sendMembershipExpiryEmail(
@@ -96,9 +80,6 @@ export const checkAndProcessExpiredMemberships = async () => {
   }
 };
 
-/**
- * Send renewal reminders to members expiring soon (within 7 days)
- */
 export const sendRemindersToExpiringMembers = async () => {
   try {
     const membersSnapshot = await db.collection("members").get();
@@ -111,11 +92,10 @@ export const sendRemindersToExpiringMembers = async () => {
 
       const daysRemaining = getDaysRemaining(member.expiryDate);
 
-      // Send reminder if expiring within 7 days but not yet expired
       if (daysRemaining > 0 && daysRemaining <= 7) {
         try {
           if (member.email) {
-            // Check if reminder was already sent today
+            
             const today = new Date().toDateString();
             if (
               !member.lastReminderSentDate ||
@@ -128,7 +108,6 @@ export const sendRemindersToExpiringMembers = async () => {
                 daysRemaining
               );
 
-              // Update last reminder sent date
               await db.collection("members").doc(doc.id).update({
                 lastReminderSentDate: new Date().toISOString(),
               });

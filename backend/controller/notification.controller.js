@@ -1,8 +1,5 @@
 import { db } from "../firebase.js";
 
-/**
- * Get all notifications
- */
 export const getAllNotifications = async (req, res) => {
   try {
     const notificationsSnapshot = await db.collection("notifications").orderBy("createdAt", "desc").get();
@@ -22,9 +19,6 @@ export const getAllNotifications = async (req, res) => {
   }
 };
 
-/**
- * Add a new notification
- */
 export const addNotification = async (req, res) => {
   try {
     const { title, description } = req.body;
@@ -49,9 +43,6 @@ export const addNotification = async (req, res) => {
   }
 };
 
-/**
- * Delete a notification
- */
 export const deleteNotification = async (req, res) => {
   try {
     const { notificationId } = req.params;

@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/MembershipStatus.css";
 
-/**
- * MembershipStatus Component
- * Displays user's current membership details, expiry status, and renewal options
- */
 const MembershipStatus = ({ memberId }) => {
   const [membership, setMembership] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,7 +14,7 @@ const MembershipStatus = ({ memberId }) => {
     try {
       setLoading(true);
       const response = await fetch(
-        `http://localhost:3000/subscription/status/${memberId}`
+        `${import.meta.env.VITE_API_URL}/subscription/status/${memberId}`
       );
 
       if (!response.ok) throw new Error("Failed to fetch membership status");
@@ -56,9 +52,8 @@ const MembershipStatus = ({ memberId }) => {
       return "Your membership has expired. Renew now to regain access.";
     }
     if (membership.daysRemaining <= 7) {
-      return `Your membership expires in ${membership.daysRemaining} day${
-        membership.daysRemaining !== 1 ? "s" : ""
-      }. Renew soon!`;
+      return `Your membership expires in ${membership.daysRemaining} day${membership.daysRemaining !== 1 ? "s" : ""
+        }. Renew soon!`;
     }
     return `Your membership is active for ${membership.daysRemaining} more days.`;
   };

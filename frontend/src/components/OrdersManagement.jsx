@@ -16,16 +16,16 @@ const OrdersManagement = ({ adminIdToken }) => {
     try {
       setLoading(true);
       const response = await axios.get(
-        "http://localhost:3000/orders/all",
+        `${import.meta.env.VITE_API_URL}/orders/all`,
         {
           headers: {
             Authorization: `Bearer ${adminIdToken}`,
           },
         }
       );
-      // Filter to show only supplement orders, exclude membership/subscription orders
+
       const supplementOrders = (response.data.orders || []).filter(order => {
-        // Check if any item in the order is NOT a membership type
+
         return order.items.some(item => item.type !== "membership" && item.type !== "membership_renewal");
       });
       console.log("Fetched Supplement Orders:", supplementOrders);
@@ -42,7 +42,7 @@ const OrdersManagement = ({ adminIdToken }) => {
   const handleUpdateStatus = async (orderId, newStatus) => {
     try {
       await axios.put(
-        `http://localhost:3000/orders/${orderId}/status`,
+        `${import.meta.env.VITE_API_URL}/orders/${orderId}/status`,
         { status: newStatus },
         {
           headers: {
@@ -61,7 +61,7 @@ const OrdersManagement = ({ adminIdToken }) => {
     if (window.confirm("Are you sure you want to delete this order? This action cannot be undone.")) {
       try {
         await axios.delete(
-          `http://localhost:3000/orders/${orderId}`,
+          `${import.meta.env.VITE_API_URL}/orders/${orderId}`,
           {
             headers: {
               Authorization: `Bearer ${adminIdToken}`,
@@ -172,14 +172,14 @@ const OrdersManagement = ({ adminIdToken }) => {
                             border: "1px solid #ddd",
                             cursor: "pointer",
                             fontWeight: "bold",
-                            backgroundColor: 
+                            backgroundColor:
                               order.status === "confirmed" ? "#d4edda" :
-                              order.status === "collected" ? "#cce5ff" :
-                              order.status === "rejected" ? "#f8d7da" : "white",
+                                order.status === "collected" ? "#cce5ff" :
+                                  order.status === "rejected" ? "#f8d7da" : "white",
                             color:
                               order.status === "confirmed" ? "#155724" :
-                              order.status === "collected" ? "#004085" :
-                              order.status === "rejected" ? "#721c24" : "black",
+                                order.status === "collected" ? "#004085" :
+                                  order.status === "rejected" ? "#721c24" : "black",
                           }}
                         >
                           <option value="confirmed">✓ Confirmed</option>
@@ -214,7 +214,7 @@ const OrdersManagement = ({ adminIdToken }) => {
                       </td>
                     </tr>
 
-                    {/* Expanded Order Details */}
+                    { }
                     {expandedOrderId === order._id && (
                       <tr style={{ backgroundColor: "#f9f9f9" }}>
                         <td colSpan="7" style={{ padding: "20px" }}>

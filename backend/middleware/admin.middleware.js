@@ -1,12 +1,12 @@
-// middleware/checkAdmin.js
+
 import { auth, db } from "../firebase.js";
 
 export const checkAdmin = async (req, res, next) => {
-  // Get idToken from body (POST) or headers (GET)
+  
   let idToken = req.body?.idToken;
   
   if (!idToken && req.headers.authorization) {
-    // Extract from Authorization header if present
+    
     idToken = req.headers.authorization.replace("Bearer ", "");
   }
 
@@ -19,7 +19,7 @@ export const checkAdmin = async (req, res, next) => {
     const userDoc = await db.collection("users").doc(decodedToken.uid).get();
 
     if (userDoc.exists && userDoc.data().role === "admin") {
-      next(); // ✅ allow
+      next(); 
     } else {
       res.status(403).json({ error: "Access denied. Admins only." });
     }

@@ -19,7 +19,6 @@ const CartPage = () => {
   const navigate = useNavigate();
   const { toast, showToast } = useToast();
 
-  // Redirect if not a member
   if (!isLoggedIn || role !== "member") {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
@@ -53,7 +52,7 @@ const CartPage = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Cart Items */}
+          {}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-semibold mb-4">
@@ -66,14 +65,14 @@ const CartPage = () => {
                     key={item.id}
                     className="flex items-center gap-4 pb-4 border-b last:border-b-0"
                   >
-                    {/* Product Image */}
+                    {}
                     <img
                       src={item.imageUrl}
                       alt={item.name}
                       className="w-20 h-20 object-contain rounded-lg bg-gray-100"
                     />
 
-                    {/* Product Info */}
+                    {}
                     <div className="flex-1">
                       <h3 className="font-semibold text-gray-900">
                         {item.name}
@@ -86,7 +85,7 @@ const CartPage = () => {
                       </p>
                     </div>
 
-                    {/* Quantity Controls */}
+                    {}
                     <div className="flex items-center gap-2 bg-gray-100 px-2 py-1 rounded-lg">
                       <button
                         onClick={() => updateQuantity(item.id, (item.quantity || 1) - 1)}
@@ -105,7 +104,7 @@ const CartPage = () => {
                       </button>
                     </div>
 
-                    {/* Remove Button */}
+                    {}
                     <button
                       onClick={() => removeFromCart(item.id)}
                       className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
@@ -116,7 +115,7 @@ const CartPage = () => {
                 ))}
               </div>
 
-              {/* Continue Shopping Button */}
+              {}
               <button
                 onClick={() => navigate("/supplements")}
                 className="mt-6 w-full px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
@@ -126,7 +125,7 @@ const CartPage = () => {
             </div>
           </div>
 
-          {/* Order Summary */}
+          {}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-md p-6 sticky top-20">
               <h2 className="text-xl font-semibold mb-6">Order Summary</h2>
@@ -167,7 +166,7 @@ const CartPage = () => {
         </div>
       )}
 
-      {/* Order Confirmation Modal */}
+      {}
       {showConfirmationModal && (
         <OrderConfirmationModal
           onClose={() => setShowConfirmationModal(false)}
@@ -175,7 +174,7 @@ const CartPage = () => {
         />
       )}
 
-      {/* Toast Notification */}
+      {}
       <Toast toast={toast} />
     </div>
   );

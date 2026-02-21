@@ -13,7 +13,6 @@ const Profile = () => {
   const [error, setError] = useState("");
   const [expandedOrder, setExpandedOrder] = useState(null);
 
-  // Redirect if not logged in
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/login");
@@ -78,7 +77,6 @@ const Profile = () => {
     return null;
   }
 
-  // Only members can view full profile
   if (role !== "member") {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
@@ -96,31 +94,29 @@ const Profile = () => {
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-8">My Profile</h1>
 
-      {/* Tabs */}
+      { }
       <div className="flex gap-2 mb-8 border-b">
         <button
           onClick={() => setActiveTab("info")}
-          className={`px-6 py-3 font-semibold transition-all ${
-            activeTab === "info"
+          className={`px-6 py-3 font-semibold transition-all ${activeTab === "info"
               ? "text-blue-600 border-b-2 border-blue-600"
               : "text-gray-600 hover:text-gray-800"
-          }`}
+            }`}
         >
           Profile Info
         </button>
         <button
           onClick={() => setActiveTab("orders")}
-          className={`px-6 py-3 font-semibold transition-all ${
-            activeTab === "orders"
+          className={`px-6 py-3 font-semibold transition-all ${activeTab === "orders"
               ? "text-blue-600 border-b-2 border-blue-600"
               : "text-gray-600 hover:text-gray-800"
-          }`}
+            }`}
         >
           My Orders
         </button>
       </div>
 
-      {/* Profile Info Tab */}
+      { }
       {activeTab === "info" && (
         <div className="bg-white rounded-lg shadow-md p-8">
           {userInfo ? (
@@ -136,7 +132,7 @@ const Profile = () => {
               <div>
                 <label className="text-gray-600 text-sm font-medium">Member Since</label>
                 <p className="text-lg text-gray-700">
-                  {userInfo.joinDate || userInfo.createdAt 
+                  {userInfo.joinDate || userInfo.createdAt
                     ? new Date(userInfo.joinDate || userInfo.createdAt).toLocaleDateString('en-IN')
                     : "N/A"}
                 </p>
@@ -158,9 +154,8 @@ const Profile = () => {
               {userInfo.status && (
                 <div>
                   <label className="text-gray-600 text-sm font-medium">Status</label>
-                  <p className={`text-lg font-semibold ${
-                    userInfo.status === 'active' ? 'text-green-600' : 'text-red-600'
-                  }`}>
+                  <p className={`text-lg font-semibold ${userInfo.status === 'active' ? 'text-green-600' : 'text-red-600'
+                    }`}>
                     {userInfo.status.charAt(0).toUpperCase() + userInfo.status.slice(1)}
                   </p>
                 </div>
@@ -188,7 +183,7 @@ const Profile = () => {
         </div>
       )}
 
-      {/* Orders Tab */}
+      { }
       {activeTab === "orders" && (
         <div>
           {error && (
@@ -219,7 +214,9 @@ const Profile = () => {
                   <div className="flex justify-between items-center mb-4">
                     <div>
                       <p className="text-gray-600 text-sm">Order ID</p>
-                      <p className="font-semibold">{order._id}</p>
+                      <p className="font-semibold" title={order._id}>
+                        {order._id.length > 20 ? `${order._id.substring(0, 20)}...` : order._id}
+                      </p>
                     </div>
                     <div className="text-right">
                       <p className="text-gray-600 text-sm">Order Date</p>
@@ -244,7 +241,7 @@ const Profile = () => {
                     </div>
                   </div>
 
-                  {/* Expandable Items */}
+                  { }
                   <button
                     onClick={() =>
                       setExpandedOrder(
@@ -270,7 +267,10 @@ const Profile = () => {
                               {item.description}
                             </p>
                           </div>
-                          <p className="font-semibold">₹{item.price}</p>
+                          <div className="text-right">
+                            <p className="font-semibold">₹{item.price}</p>
+                            <p className="text-sm text-gray-600">Qty: {item.quantity || 1}</p>
+                          </div>
                         </div>
                       ))}
                     </div>

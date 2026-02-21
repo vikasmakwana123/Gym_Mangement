@@ -8,7 +8,6 @@ const MemberManagement = ({ adminIdToken }) => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Form state
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -16,7 +15,6 @@ const MemberManagement = ({ adminIdToken }) => {
     packageType: "basic",
   });
 
-  // Fetch all members on mount
   useEffect(() => {
     fetchMembers();
   }, []);
@@ -25,7 +23,7 @@ const MemberManagement = ({ adminIdToken }) => {
     try {
       setLoading(true);
       const response = await axios.get(
-        "http://localhost:3000/admin/members",
+        `${import.meta.env.VITE_API_URL}/admin/members`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -55,7 +53,7 @@ const MemberManagement = ({ adminIdToken }) => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:3000/admin/members/add",
+        `${import.meta.env.VITE_API_URL}/admin/members/add`,
         {
           idToken: adminIdToken,
           email: formData.email,
@@ -68,8 +66,7 @@ const MemberManagement = ({ adminIdToken }) => {
       setSuccess(`Member "${formData.name}" added successfully!`);
       setFormData({ email: "", password: "", name: "", packageType: "basic" });
       setShowAddForm(false);
-      
-      // Refresh member list
+
       await fetchMembers();
     } catch (err) {
       setError("Failed to add member: " + err.response?.data?.error || err.message);
@@ -85,7 +82,7 @@ const MemberManagement = ({ adminIdToken }) => {
 
     try {
       await axios.delete(
-        `http://localhost:3000/admin/members/${memberId}`,
+        `${import.meta.env.VITE_API_URL}/admin/members/${memberId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -114,10 +111,10 @@ const MemberManagement = ({ adminIdToken }) => {
       <h1>Member Management</h1>
 
       {error && (
-        <div style={{ 
-          backgroundColor: "#fee", 
-          color: "#c00", 
-          padding: "10px", 
+        <div style={{
+          backgroundColor: "#fee",
+          color: "#c00",
+          padding: "10px",
           marginBottom: "15px",
           borderRadius: "4px"
         }}>
@@ -126,10 +123,10 @@ const MemberManagement = ({ adminIdToken }) => {
       )}
 
       {success && (
-        <div style={{ 
-          backgroundColor: "#efe", 
-          color: "#060", 
-          padding: "10px", 
+        <div style={{
+          backgroundColor: "#efe",
+          color: "#060",
+          padding: "10px",
           marginBottom: "15px",
           borderRadius: "4px"
         }}>
@@ -137,7 +134,7 @@ const MemberManagement = ({ adminIdToken }) => {
         </div>
       )}
 
-      {/* Add Member Section */}
+      { }
       <div style={{ marginBottom: "30px" }}>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
@@ -155,8 +152,9 @@ const MemberManagement = ({ adminIdToken }) => {
         </button>
 
         {showAddForm && (
-          <form onSubmit={handleAddMember} style={{ marginTop: "20px", 
-            backgroundColor: "#f5f5f5", 
+          <form onSubmit={handleAddMember} style={{
+            marginTop: "20px",
+            backgroundColor: "#f5f5f5",
             padding: "20px",
             borderRadius: "4px"
           }}>
@@ -263,7 +261,7 @@ const MemberManagement = ({ adminIdToken }) => {
         )}
       </div>
 
-      {/* Members List */}
+      { }
       <div>
         <h2>All Members ({members.length})</h2>
 
@@ -292,7 +290,7 @@ const MemberManagement = ({ adminIdToken }) => {
               </thead>
               <tbody>
                 {members.map((member) => (
-                  <tr 
+                  <tr
                     key={member.uid}
                     style={{ borderBottom: "1px solid #eee" }}
                   >

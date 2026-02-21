@@ -1,6 +1,4 @@
-/**
- * Subscription Controller - Handles membership expiry, renewal, and archival
- */
+
 import { db } from "../firebase.js";
 import { sendMembershipExpiryEmail, sendReminderEmail } from "../utils/emailUtils.js";
 import {
@@ -10,10 +8,6 @@ import {
   calculateExpiryDate,
 } from "../utils/packageUtils.js";
 
-/**
- * Check and process expired memberships
- * Moves expired members to archive and sends emails
- */
 export const processExpiredMemberships = async (req, res) => {
   try {
     const membersSnapshot = await db.collection("members").get();
@@ -24,12 +18,11 @@ export const processExpiredMemberships = async (req, res) => {
     for (const doc of membersSnapshot.docs) {
       const member = doc.data();
 
-      if (!member.expiryDate) continue; // Skip members without expiry date
+      if (!member.expiryDate) continue; 
 
-      // Check if membership has expired
       if (isMembershipExpired(member.expiryDate)) {
         try {
-          // Move to archived collection
+          
           await db.collection("expiredMembers").doc(doc.id).set({
             ...member,
             archivedAt: new Date().toISOString(),
@@ -37,13 +30,11 @@ export const processExpiredMemberships = async (req, res) => {
             status: "expired",
           });
 
-          // Update member status to expired
           await db.collection("members").doc(doc.id).update({
             status: "expired",
             expiryProcessedAt: new Date().toISOString(),
           });
 
-          // Send expiry email
           if (member.email) {
             try {
               await sendMembershipExpiryEmail(
@@ -88,9 +79,6 @@ export const processExpiredMemberships = async (req, res) => {
   }
 };
 
-/**
- * Send renewal reminder emails to members expiring soon (within 7 days)
- */
 export const sendExpiryReminders = async (req, res) => {
   try {
     const membersSnapshot = await db.collection("members").get();
@@ -104,7 +92,6 @@ export const sendExpiryReminders = async (req, res) => {
 
       const daysRemaining = getDaysRemaining(member.expiryDate);
 
-      // Send reminder if expiring within 7 days but not yet expired
       if (daysRemaining > 0 && daysRemaining <= 7) {
         try {
           if (member.email) {
@@ -141,9 +128,6 @@ export const sendExpiryReminders = async (req, res) => {
   }
 };
 
-/**
- * Get all expired members from archive
- */
 export const getExpiredMembers = async (req, res) => {
   try {
     const expiredSnapshot = await db.collection("expiredMembers").get();
@@ -167,9 +151,6 @@ export const getExpiredMembers = async (req, res) => {
   }
 };
 
-/**
- * Renew a member's subscription by updating expiry date
- */
 export const renewMembership = async (req, res) => {
   const { memberId } = req.params;
   const { packageType } = req.body;
@@ -181,7 +162,6 @@ export const renewMembership = async (req, res) => {
   try {
     const newExpiryDate = calculateExpiryDate(packageType);
 
-    // Update member in members collection
     await db.collection("members").doc(memberId).update({
       packageType,
       expiryDate: newExpiryDate.toISOString(),
@@ -189,7 +169,6 @@ export const renewMembership = async (req, res) => {
       lastRenewalDate: new Date().toISOString(),
     });
 
-    // If member was in expired collection, remove them
     await db.collection("expiredMembers").doc(memberId).delete();
 
     res.status(200).json({
@@ -204,9 +183,6 @@ export const renewMembership = async (req, res) => {
   }
 };
 
-/**
- * Get membership status for a specific member
- */
 export const getMembershipStatus = async (req, res) => {
   const { memberId } = req.params;
 
@@ -214,7 +190,7 @@ export const getMembershipStatus = async (req, res) => {
     let memberDoc = await db.collection("members").doc(memberId).get();
 
     if (!memberDoc.exists) {
-      // Check in expired members
+      
       memberDoc = await db.collection("expiredMembers").doc(memberId).get();
       if (!memberDoc.exists) {
         return res.status(404).json({ error: "Member not found" });

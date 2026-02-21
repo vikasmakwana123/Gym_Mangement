@@ -3,7 +3,7 @@ import { supabase } from "../supabase.js";
 
 export const GetSupplements = async (req, res) => {
   try {
-    // Fetch all supplements from Firestore (PUBLIC)
+    
     const snapshot = await db.collection("supplements").get();
 
     const supplements = [];
@@ -22,41 +22,36 @@ export const GetSupplements = async (req, res) => {
   }
 };
 
-
 export const AddSuppliments = async (req, res) => {
   const { name, description, price,weight } = req.body;
   const idToken = req.headers.authorization?.split("Bearer ")[1];
-  const file = req.file; // Multer file object
+  const file = req.file; 
 
   try {
-    // 1. Verify Firebase ID token
+    
     const decodedToken = await auth.verifyIdToken(idToken);
     const uid = decodedToken.uid;
 
-    // 2. Check role in Firestore
     const userDoc = await db.collection("users").doc(uid).get();
     if (!userDoc.exists || userDoc.data().role !== "admin") {
       return res.status(403).json({ error: "Access denied. Admins only." });
     }
 
-    // 3. Upload image to Supabase Storage
     const fileName = `${Date.now()}-${file.originalname}`;
     const { error: uploadError } = await supabase.storage
-      .from("Suppliments") // 👈 your bucket name
+      .from("Suppliments") 
       .upload(fileName, file.buffer, {
         contentType: file.mimetype,
       });
     console.log("Upload Error:", uploadError);
     if (uploadError) throw uploadError;
 
-    // 4. Get public URL of uploaded image
     const { data: publicUrlData } = supabase.storage
       .from("Suppliments")
       .getPublicUrl(fileName);
 
     const imageUrl = publicUrlData.publicUrl;
 
-    // 5. Store supplement data in Firestore
     await db.collection("supplements").add({
       name,
       description,

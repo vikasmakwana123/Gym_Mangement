@@ -16,17 +16,13 @@ const SupplementCard = ({
   const { isLoggedIn, role } = useUser();
   const { toast, showToast } = useToast();
   
-  // Use item.id (from Firestore doc.id) for unique identification
   const productId = item?.id;
   
-  // Debug: log to check if productId is correct
   console.log("Product ID:", productId, "Item Name:", item?.name);
   
-  // Find if THIS specific product is in the cart by comparing exact product ID
   const cartItem = cart.find((c) => c?.id === productId);
   const cartQuantity = cartItem?.quantity || 0;
   
-  // Only members can add to cart (not admin, not non-logged-in users)
   const canAddToCart = isLoggedIn && role === "member";
   
   const handleAddToCart = () => {
@@ -38,7 +34,7 @@ const SupplementCard = ({
       alert("Admins cannot add products to cart");
       return;
     }
-    // Ensure the item has an ID before adding
+    
     if (!productId) {
       alert("Error: Product ID not found");
       return;
@@ -50,14 +46,14 @@ const SupplementCard = ({
   return (
     <div className="relative w-full sm:w-[280px] rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300">
 
-      {/* Triangle */}
+      {}
       <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-0 h-0 
         border-l-[14px] border-l-transparent
         border-r-[14px] border-r-transparent
         border-b-[14px] border-b-white">
       </div>
 
-      {/* Image */}
+      {}
       <div className="bg-zinc-100 rounded-t-2xl p-4">
         <img
           src={imageUrl}
@@ -66,7 +62,7 @@ const SupplementCard = ({
         />
       </div>
 
-      {/* Content */}
+      {}
       <div className="p-4 flex justify-between gap-3">
         <div>
           <h3 className="font-semibold text-gray-900">{name}</h3>
@@ -80,12 +76,12 @@ const SupplementCard = ({
             ₹{price}
           </span>
 
-          {/* ✅ Weight now visible */}
+          {}
           <span className="text-xs text-gray-400">
             {weight || quantity} kg
           </span>
 
-          {/* Show quantity selector if item is in cart, else show add button */}
+          {}
           {cartQuantity > 0 ? (
             <div className="mt-3 flex items-center gap-2 bg-gray-900 text-white px-2 py-1 rounded-full">
               <button
@@ -117,7 +113,6 @@ const SupplementCard = ({
               Add
             </button>
           )}
-
 
         </div>
       </div>

@@ -29,10 +29,10 @@ const Navbar = () => {
     <nav className="sticky top-0 z-50 backdrop-blur-md bg-white/70 border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
 
-        {/* Logo */}
+        {}
         <h3 className="text-xl font-semibold tracking-wide">VM Fitness</h3>
 
-        {/* Desktop Menu */}
+        {}
         <div className="hidden md:flex items-center gap-x-4 relative">
           <NavLink to="/" className={navLinkClasses}>Home</NavLink>
           <NavLink to="/supplements" className={navLinkClasses}>Supplements</NavLink>
@@ -92,7 +92,7 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Hamburger Button */}
+        {}
         <button
           className="md:hidden flex flex-col justify-center items-center w-8 h-8"
           onClick={() => setMobileMenu(!mobileMenu)}
@@ -115,7 +115,7 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {}
       {mobileMenu && (
         <div className="md:hidden bg-white border-t border-gray-200 px-4 py-4 space-y-2">
           <NavLink to="/" className={navLinkClasses} onClick={() => setMobileMenu(false)}>Home</NavLink>

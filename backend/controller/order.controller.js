@@ -1,18 +1,15 @@
 import { db } from "../firebase.js";
 
-// Place order (Member only)
 export const placeOrder = async (req, res) => {
   try {
     const { memberId, items, totalPrice, status } = req.body;
 
-    // Validate required fields
     if (!memberId || !items || items.length === 0 || !totalPrice) {
       return res.status(400).json({
         error: "Missing required fields: memberId, items, totalPrice",
       });
     }
 
-    // Create order document
     const orderId = `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     const orderData = {
@@ -25,7 +22,6 @@ export const placeOrder = async (req, res) => {
       updatedAt: new Date().toISOString(),
     };
 
-    // Save to Firestore using collection API
     await db.collection("orders").doc(orderId).set(orderData);
 
     res.status(201).json({
@@ -38,7 +34,6 @@ export const placeOrder = async (req, res) => {
   }
 };
 
-// Get orders by member
 export const getOrdersByMember = async (req, res) => {
   try {
     const { memberId } = req.params;
@@ -47,7 +42,6 @@ export const getOrdersByMember = async (req, res) => {
       return res.status(400).json({ error: "Member ID is required" });
     }
 
-    // Query orders by member ID
     const ordersSnapshot = await db
       .collection("orders")
       .where("memberId", "==", memberId)
@@ -61,7 +55,6 @@ export const getOrdersByMember = async (req, res) => {
       });
     });
 
-    // Sort by date (newest first)
     orders.sort((a, b) => new Date(b.placedAt) - new Date(a.placedAt));
 
     res.status(200).json({
@@ -74,7 +67,6 @@ export const getOrdersByMember = async (req, res) => {
   }
 };
 
-// Get all orders (Admin only)
 export const getAllOrders = async (req, res) => {
   try {
     const ordersSnapshot = await db.collection("orders").get();
@@ -86,7 +78,6 @@ export const getAllOrders = async (req, res) => {
         ...doc.data(),
       };
 
-      // Get member name and email from members collection if not already stored
       if (!order.memberName || !order.memberEmail) {
         try {
           const memberDoc = await db.collection("members").doc(order.memberId).get();
@@ -108,7 +99,6 @@ export const getAllOrders = async (req, res) => {
       orders.push(order);
     }
 
-    // Sort by date (newest first)
     orders.sort((a, b) => new Date(b.placedAt) - new Date(a.placedAt));
 
     res.status(200).json({
@@ -121,7 +111,6 @@ export const getAllOrders = async (req, res) => {
   }
 };
 
-// Get single order
 export const getOrderById = async (req, res) => {
   try {
     const { orderId } = req.params;
@@ -141,7 +130,6 @@ export const getOrderById = async (req, res) => {
       ...orderDoc.data(),
     };
 
-    // Get member name and email if not already stored
     if (!order.memberName || !order.memberEmail) {
       try {
         const memberDoc = await db.collection("members").doc(order.memberId).get();
@@ -170,7 +158,6 @@ export const getOrderById = async (req, res) => {
   }
 };
 
-// Update order status (Admin only)
 export const updateOrderStatus = async (req, res) => {
   try {
     const { orderId } = req.params;
@@ -180,7 +167,6 @@ export const updateOrderStatus = async (req, res) => {
       return res.status(400).json({ error: "Order ID and status are required" });
     }
 
-    // Update only the status field
     await db.collection("orders").doc(orderId).update({
       status,
       updatedAt: new Date().toISOString(),
@@ -197,7 +183,6 @@ export const updateOrderStatus = async (req, res) => {
   }
 };
 
-// Delete order (Admin only)
 export const deleteOrder = async (req, res) => {
   try {
     const { orderId } = req.params;
@@ -212,7 +197,6 @@ export const deleteOrder = async (req, res) => {
       return res.status(404).json({ error: "Order not found" });
     }
 
-    // Delete the order
     await db.collection("orders").doc(orderId).delete();
 
     res.status(200).json({

@@ -7,7 +7,7 @@ import PrintReportModal from "../components/PrintReportModal";
 import ExpiredMembersModal from "../components/ExpiredMembersModal";
 
 const AdminDashboard = ({ adminIdToken, onLogout }) => {
-  const [activeTab, setActiveTab] = useState("members"); // "members", "supplements", "orders" or "subscriptions"
+  const [activeTab, setActiveTab] = useState("members");
   const [members, setMembers] = useState([]);
   const [supplements, setSupplements] = useState([]);
   const [notifications, setNotifications] = useState([]);
@@ -43,7 +43,6 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
     description: "",
   });
 
-  // Fetch all members on mount
   useEffect(() => {
     if (activeTab === "members") {
       fetchMembers();
@@ -58,14 +57,11 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
     }
   }, [activeTab, adminIdToken]);
 
-
-  // ============ MEMBERS FUNCTIONS ============
-
   const fetchMembers = async () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        "http://localhost:3000/admin/members",
+        `${import.meta.env.VITE_API_URL}/admin/members`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -96,7 +92,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:3000/admin/members/add",
+        `${import.meta.env.VITE_API_URL}/admin/members/add`,
         {
           idToken: adminIdToken,
           email: memberFormData.email,
@@ -110,7 +106,6 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
       setMemberFormData({ email: "", password: "", name: "", packageType: "basic" });
       setShowAddForm(false);
 
-      // Refresh member list
       await fetchMembers();
     } catch (err) {
       setError("❌ Failed to add member: " + (err.response?.data?.error || err.message));
@@ -126,7 +121,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
 
     try {
       await axios.delete(
-        `http://localhost:3000/admin/members/${memberId}`,
+        `${import.meta.env.VITE_API_URL}/admin/members/${memberId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -150,13 +145,11 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
     }));
   };
 
-  // ============ SUPPLEMENTS FUNCTIONS ============
-
   const fetchSupplements = async () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        "http://localhost:3000/admin/supplements",
+        `${import.meta.env.VITE_API_URL}/admin/supplements`,
         {
           headers: {
             "Authorization": `Bearer ${adminIdToken}`,
@@ -195,7 +188,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
       formData.append("image", supplementFormData.image);
 
       const response = await axios.post(
-        "http://localhost:3000/admin/add-supplement",
+        `${import.meta.env.VITE_API_URL}/admin/add-supplement`,
         formData,
         {
           headers: {
@@ -209,7 +202,6 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
       setSupplementFormData({ name: "", description: "", price: "", image: null });
       setShowAddForm(false);
 
-      // Refresh supplement list
       await fetchSupplements();
     } catch (err) {
       setError("❌ Failed to add supplement: " + (err.response?.data?.error || err.message));
@@ -233,14 +225,11 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
     }
   };
 
-  // ============ NOTIFICATIONS FUNCTIONS ============
-
-
   const fetchNotifications = async () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        "http://localhost:3000/notifications",
+        `${import.meta.env.VITE_API_URL}/notifications`,
         {
           headers: {
             "Authorization": `Bearer ${adminIdToken}`,
@@ -270,7 +259,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:3000/notifications/add",
+        `${import.meta.env.VITE_API_URL}/notifications/add`,
         {
           title: notificationFormData.title,
           description: notificationFormData.description,
@@ -287,7 +276,6 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
       setNotificationFormData({ title: "", description: "" });
       setShowAddForm(false);
 
-      // Refresh notification list
       await fetchNotifications();
     } catch (err) {
       setError("❌ Failed to add notification: " + (err.response?.data?.error || err.message));
@@ -303,7 +291,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
 
     try {
       await axios.delete(
-        `http://localhost:3000/notifications/${notificationId}`,
+        `${import.meta.env.VITE_API_URL}/notifications/${notificationId}`,
         {
           headers: {
             "Authorization": `Bearer ${adminIdToken}`,
@@ -318,7 +306,6 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
     }
   };
 
-  // ============ DIET FUNCTIONS ============
   const fetchDietMembers = async () => {
     try {
       setDietLoading(true);
@@ -377,10 +364,8 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
       setEditingDietMemberId(null);
       setSelectedDietMemberId(null);
 
-      // Refresh members list
       await fetchDietMembers();
 
-      // Clear success message after 3 seconds
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
       console.error("Error saving diet:", err);
@@ -397,7 +382,6 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
     setError("");
   };
 
-  // Fetch diet members when diet tab is opened
   useEffect(() => {
     if (activeTab === "diet") {
       fetchDietMembers();
@@ -414,7 +398,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#f5f5f5", padding: "20px" }}>
-      {/* Header */}
+      { }
       <div style={{
         backgroundColor: "#333",
         color: "white",
@@ -448,7 +432,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
         </div>
       </div>
 
-      {/* Tabs */}
+      { }
       <div className="max-w-[1000px] mx-auto mb-[30px]">
         <div className="flex flex-col sm:flex-row flex-wrap gap-[10px] border-b-2 border-[#ddd]">
           <button
@@ -496,8 +480,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
         </div>
       </div>
 
-
-      {/* Messages */}
+      { }
       {error && (
         <div style={{
           backgroundColor: "#fee",
@@ -526,12 +509,12 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
         </div>
       )}
 
-      {/* Main Container */}
+      { }
       <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
-        {/* ====== MEMBERS TAB ====== */}
+        { }
         {activeTab === "members" && (
           <>
-            {/* Add Member Button & Print Report Button */}
+            { }
             <div style={{ marginBottom: "30px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
               <button
                 onClick={() => setShowAddForm(!showAddForm)}
@@ -690,7 +673,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
               )}
             </div>
 
-            {/* Members List */}
+            { }
             <div style={{
               backgroundColor: "white",
               padding: "25px",
@@ -794,10 +777,10 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
           </>
         )}
 
-        {/* ====== SUPPLEMENTS TAB ====== */}
+        { }
         {activeTab === "supplements" && (
           <>
-            {/* Add Supplement Button */}
+            { }
             <div style={{ marginBottom: "30px" }}>
               <button
                 onClick={() => setShowAddForm(!showAddForm)}
@@ -960,7 +943,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
               )}
             </div>
 
-            {/* Supplements List */}
+            { }
             <div style={{
               backgroundColor: "white",
               padding: "25px",
@@ -1022,7 +1005,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
                           <button
                             onClick={() => {
                               if (window.confirm(`Delete "${supplement.name}"?`)) {
-                                // Delete functionality can be added here
+
                               }
                             }}
                             style={{
@@ -1047,7 +1030,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
           </>
         )}
 
-        {/* ====== SUBSCRIPTIONS TAB ====== */}
+        { }
         {activeTab === "subscriptions" && (
           <div style={{
             backgroundColor: "white",
@@ -1058,7 +1041,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
             <h2 style={{ marginTop: 0, marginBottom: "30px" }}>📊 Subscription Management</h2>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "20px", marginBottom: "30px" }}>
-              {/* Process Expired Memberships */}
+              { }
               <div style={{
                 backgroundColor: "#f8f9fa",
                 padding: "20px",
@@ -1072,7 +1055,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
                     try {
                       setLoading(true);
                       const response = await axios.post(
-                        "http://localhost:3000/subscription/process-expired",
+                        `${import.meta.env.VITE_API_URL}/subscription/process-expired`,
                         { adminIdToken },
                         {
                           headers: {
@@ -1105,7 +1088,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
                 </button>
               </div>
 
-              {/* Send Reminder Emails */}
+              { }
               <div style={{
                 backgroundColor: "#f8f9fa",
                 padding: "20px",
@@ -1119,7 +1102,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
                     try {
                       setLoading(true);
                       const response = await axios.post(
-                        "http://localhost:3000/subscription/send-reminders",
+                        `${import.meta.env.VITE_API_URL}/subscription/send-reminders`,
                         { adminIdToken },
                         {
                           headers: {
@@ -1154,7 +1137,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
 
             </div>
 
-            {/* Info Panel */}
+            { }
             <div style={{
               backgroundColor: "#e7f3ff",
               padding: "20px",
@@ -1174,10 +1157,10 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
           </div>
         )}
 
-        {/* ====== NOTIFICATIONS TAB ====== */}
+        { }
         {activeTab === "notifications" && (
           <>
-            {/* Add Notification Button */}
+            { }
             <div style={{ marginBottom: "30px" }}>
               <button
                 onClick={() => setShowAddForm(!showAddForm)}
@@ -1272,7 +1255,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
               )}
             </div>
 
-            {/* Notifications List */}
+            { }
             <div style={{
               backgroundColor: "white",
               padding: "25px",
@@ -1341,7 +1324,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
           </>
         )}
 
-        {/* ====== DIET TAB ====== */}
+        { }
         {activeTab === "diet" && (
           <div style={{ backgroundColor: "white", padding: "25px", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0,0,0,0.1)" }}>
             <h2 style={{ marginTop: 0, marginBottom: "30px" }}>🥗 Manage Member Diet Plans</h2>
@@ -1373,7 +1356,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
             )}
 
             {editingDietMemberId ? (
-              // Diet editing form
+
               <div style={{ backgroundColor: "#f9f9f9", padding: "20px", borderRadius: "8px" }}>
                 <h3 style={{ marginTop: 0 }}>
                   Edit Diet for{" "}
@@ -1442,7 +1425,7 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
                 </div>
               </div>
             ) : (
-              // Members list
+
               <div>
                 {dietLoading && dietMembers.length === 0 ? (
                   <div style={{ textAlign: "center", padding: "20px", color: "#666" }}>
@@ -1542,13 +1525,13 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
           </div>
         )}
 
-        {/* ====== ORDERS TAB ====== */}
+        { }
         {activeTab === "orders" && (
           <OrdersManagement adminIdToken={adminIdToken} />
         )}
       </div>
 
-      {/* Renewal Modal */}
+      { }
       {renewalModalMember && (
         <MemberRenewalModal
           member={renewalModalMember}
@@ -1561,14 +1544,14 @@ const AdminDashboard = ({ adminIdToken, onLogout }) => {
         />
       )}
 
-      {/* Print Report Modal */}
+      { }
       <PrintReportModal
         isOpen={showReportModal}
         onClose={() => setShowReportModal(false)}
         adminIdToken={adminIdToken}
       />
 
-      {/* Expired Members Modal */}
+      { }
       <ExpiredMembersModal
         isOpen={showExpiredMembersModal}
         onClose={() => setShowExpiredMembersModal(false)}

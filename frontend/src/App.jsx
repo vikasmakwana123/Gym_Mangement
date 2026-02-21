@@ -12,7 +12,6 @@ import CartPage from "./pages/CartPage";
 import { useUser } from "../context/UserContext";
 import NotificationsPanel from "./components/NotificationsPanel";
 
-
 function App() {
 
   const [userRole, setUserRole] = useState("");

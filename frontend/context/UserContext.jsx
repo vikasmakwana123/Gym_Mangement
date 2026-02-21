@@ -6,7 +6,6 @@ export const UserProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [role, setRole] = useState(null);
 
-  // ✅ RESTORE AUTH ON PAGE LOAD
   useEffect(() => {
     const token = localStorage.getItem("idToken");
     const savedRole = localStorage.getItem("userRole");
@@ -35,6 +34,7 @@ export const UserProvider = ({ children }) => {
     <UserContext.Provider
       value={{
         isLoggedIn,
+        setIsLoggedIn,
         role,
         login,
         logout,

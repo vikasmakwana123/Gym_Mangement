@@ -11,7 +11,7 @@ const Login = ({ onLoginSuccess }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { login } = useUser(); 
+  const { login } = useUser();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -20,7 +20,7 @@ const Login = ({ onLoginSuccess }) => {
     setLoading(true);
 
     try {
-      // 1️⃣ Firebase Authentication
+
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
@@ -30,28 +30,23 @@ const Login = ({ onLoginSuccess }) => {
       const idToken = await userCredential.user.getIdToken();
       const uid = userCredential.user.uid;
 
-      // 2️⃣ Verify role from backend
       const response = await axios.post(
-        "http://localhost:3000/auth/login",
+        `${import.meta.env.VITE_API_URL}/auth/login`,
         { idToken }
       );
 
       const userRole = response.data.role;
 
-      // 3️⃣ Persist auth data
       localStorage.setItem("idToken", idToken);
       localStorage.setItem("uid", uid);
       localStorage.setItem("userRole", userRole);
 
-      // 4️⃣ Sync with UserContext
       login(userRole);
-      
-      // 4.5️⃣ Call parent callback to update App state
+
       if (onLoginSuccess) {
         onLoginSuccess(userRole, idToken);
       }
 
-      // 5️⃣ Navigate based on role
       if (userRole === "admin") {
         navigate("/admin");
       } else {
@@ -86,7 +81,7 @@ const Login = ({ onLoginSuccess }) => {
           boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
         }}
       >
-        {/* Header */}
+        { }
         <div
           style={{
             backgroundColor: "#333",
@@ -99,7 +94,7 @@ const Login = ({ onLoginSuccess }) => {
           <p style={{ opacity: 0.8 }}>Manage Your Fitness Goals</p>
         </div>
 
-        {/* Form */}
+        { }
         <div style={{ padding: "30px" }}>
           <form onSubmit={handleLogin}>
             <input

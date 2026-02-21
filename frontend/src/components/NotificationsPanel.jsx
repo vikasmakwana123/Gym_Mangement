@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/NotificationsPanel.css";
 
-/**
- * NotificationsPanel Component
- * Displays notifications for members with modal details
- */
 const NotificationsPanel = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,7 +14,7 @@ const NotificationsPanel = () => {
   const fetchNotifications = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:3000/notifications");
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/notifications`);
 
       if (!response.ok) throw new Error("Failed to fetch notifications");
 
@@ -44,7 +40,7 @@ const NotificationsPanel = () => {
     <>
       <div className="notifications-panel-container h-[100vh]">
         <div className="notifications-header">
-          <h3 className="flex items-center justify-center gap-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-bell-ring-icon lucide-bell-ring"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M22 8c0-2.3-.8-4.3-2-6"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/><path d="M4 2C2.8 3.7 2 5.7 2 8"/></svg>  Notifications</h3>
+          <h3 className="flex items-center justify-center gap-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-bell-ring-icon lucide-bell-ring"><path d="M10.268 21a2 2 0 0 0 3.464 0" /><path d="M22 8c0-2.3-.8-4.3-2-6" /><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" /><path d="M4 2C2.8 3.7 2 5.7 2 8" /></svg>  Notifications</h3>
           <span className="notification-count">{notifications.length}</span>
         </div>
 
@@ -74,7 +70,7 @@ const NotificationsPanel = () => {
         )}
       </div>
 
-      {/* Notification Modal */}
+      { }
       {selectedNotification && (
         <div className="notification-modal-overlay" onClick={() => setSelectedNotification(null)}>
           <div className="notification-modal" onClick={(e) => e.stopPropagation()}>

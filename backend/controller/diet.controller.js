@@ -1,6 +1,5 @@
 import { db } from "../firebase.js";
 
-// Add or update diet details for a member
 export const addUpdateDiet = async (req, res) => {
   try {
     const { memberId, dietDetails } = req.body;
@@ -9,13 +8,11 @@ export const addUpdateDiet = async (req, res) => {
       return res.status(400).json({ error: "Member ID and diet details are required" });
     }
 
-    // Check if member exists
     const memberDoc = await db.collection("members").doc(memberId).get();
     if (!memberDoc.exists) {
       return res.status(404).json({ error: "Member not found" });
     }
 
-    // Update member's diet information
     await db.collection("members").doc(memberId).update({
       dietDetails: dietDetails,
       dietUpdatedAt: new Date().toISOString(),
@@ -32,7 +29,6 @@ export const addUpdateDiet = async (req, res) => {
   }
 };
 
-// Get diet details for a member
 export const getDietDetails = async (req, res) => {
   try {
     const { memberId } = req.params;
@@ -61,7 +57,6 @@ export const getDietDetails = async (req, res) => {
   }
 };
 
-// Get all members for diet management
 export const getAllMembersForDiet = async (req, res) => {
   try {
     const membersSnapshot = await db.collection("members").get();
@@ -77,7 +72,6 @@ export const getAllMembersForDiet = async (req, res) => {
       });
     });
 
-    // Sort by name
     members.sort((a, b) => a.name.localeCompare(b.name));
 
     res.status(200).json({

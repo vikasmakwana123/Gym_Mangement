@@ -23,7 +23,6 @@ const OrderConfirmationModal = ({ onClose, onOrderPlaced }) => {
         return;
       }
 
-      // Prepare order data
       const orderData = {
         memberId: uid,
         items: cart.map((item) => ({
@@ -40,7 +39,6 @@ const OrderConfirmationModal = ({ onClose, onOrderPlaced }) => {
         placedAt: new Date().toISOString(),
       };
 
-      // Call backend API to save order
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/orders/place-order`,
         orderData,
@@ -53,7 +51,7 @@ const OrderConfirmationModal = ({ onClose, onOrderPlaced }) => {
       );
 
       if (response.status === 201 || response.status === 200) {
-        // Order placed successfully
+        
         confirmOrder();
         clearCart();
         setShowConfirmationModal(false);
@@ -76,7 +74,7 @@ const OrderConfirmationModal = ({ onClose, onOrderPlaced }) => {
       <div className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full mx-4">
         <h2 className="text-2xl font-bold mb-6">Order Confirmation</h2>
 
-        {/* Order Items */}
+        {}
         <div className="mb-6 max-h-64 overflow-y-auto">
           <h3 className="font-semibold mb-3">Items:</h3>
           {cart.map((item) => (
@@ -90,7 +88,7 @@ const OrderConfirmationModal = ({ onClose, onOrderPlaced }) => {
           ))}
         </div>
 
-        {/* Total Price */}
+        {}
         <div className="bg-gray-100 rounded-lg p-4 mb-6">
           <div className="flex justify-between items-center">
             <span className="font-bold text-lg">Total Price:</span>
@@ -98,14 +96,14 @@ const OrderConfirmationModal = ({ onClose, onOrderPlaced }) => {
           </div>
         </div>
 
-        {/* Error Message */}
+        {}
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4">
             {error}
           </div>
         )}
 
-        {/* Action Buttons */}
+        {}
         <div className="flex gap-3">
           <button
             onClick={onClose}

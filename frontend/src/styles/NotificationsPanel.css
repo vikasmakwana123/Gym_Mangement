@@ -1,4 +1,4 @@
-/* Notifications Panel Styles */
+
 
 .notifications-panel-container {
   background: linear-gradient(135deg, #f7f8fe 0%, #e0dae7 100%);
@@ -112,7 +112,7 @@
   color: #666;
 }
 
-/* Modal Styles */
+
 
 .notification-modal-overlay {
   position: fixed;
@@ -239,7 +239,7 @@
   background-color: #764ba2;
 }
 
-/* Scrollbar styles */
+
 .notifications-list::-webkit-scrollbar {
   width: 6px;
 }

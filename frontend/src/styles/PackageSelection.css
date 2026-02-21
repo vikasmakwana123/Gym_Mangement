@@ -1,4 +1,4 @@
-/* Package Selection Styles */
+
 
 .package-selection-container {
   padding: 40px 20px;
@@ -211,7 +211,7 @@
   opacity: 1;
 }
 
-/* Animations */
+
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -239,7 +239,7 @@
   animation-delay: 0.3s;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
   .package-selection-container {
     padding: 20px 10px;

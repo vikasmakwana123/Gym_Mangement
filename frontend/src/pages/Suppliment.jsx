@@ -6,7 +6,6 @@ const Suppliment = () => {
   const [supplimentsData, setSupplimentsData] = useState([]);
   const [error, setError] = useState("");
 
-
   useEffect(() => {
     const fetchSuppliments = async () => {
       try {

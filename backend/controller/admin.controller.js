@@ -1,28 +1,23 @@
 
-// controllers/adminController.js
-import { auth, db } from "../firebase.js"; // Firebase Admin SDK setup
+import { auth, db } from "../firebase.js"; 
 import { calculateExpiryDate, getPackageDetails } from "../utils/packageUtils.js";
 
-// Create a new Admin account
 export const createAdminAccount = async (req, res) => {
   const { email, password, name } = req.body;
 
   try {
     
-
-    // 1. Create user in Firebase Authentication
     const userRecord = await auth.createUser({
       email,
       password,
       displayName: name,
     });
 
-    // 2. Assign role in Firestore
     await db.collection("users").doc(userRecord.uid).set({
       uid: userRecord.uid,
       email,
       name,
-      role: "admin",   // 👈 Important: mark as admin
+      role: "admin",   
       createdAt: new Date().toISOString(),
     });
 
@@ -41,11 +36,9 @@ export const createAdminAccount = async (req, res) => {
   }
 };
 
-// Add new member (Admin only)
 export const addNewMember = async (req, res) => {
   const { email, password, name, packageType } = req.body;
 
-  // Validate required fields
   if (!email || !password || !name) {
     return res.status(400).json({ 
       error: "Email, password, and name are required" 
@@ -53,19 +46,17 @@ export const addNewMember = async (req, res) => {
   }
 
   try {
-    // 1. Create user in Firebase Authentication
+    
     const userRecord = await auth.createUser({
       email,
       password,
       displayName: name,
     });
 
-    // 2. Calculate expiry date based on package type
     const selectedPackage = packageType || "basic";
     const expiryDate = calculateExpiryDate(selectedPackage);
     const packageDetails = getPackageDetails(selectedPackage);
 
-    // 3. Save member details in Firestore
     const memberData = {
       uid: userRecord.uid,
       email,
@@ -80,7 +71,6 @@ export const addNewMember = async (req, res) => {
     
     await db.collection("members").doc(userRecord.uid).set(memberData);
 
-    // 4. Create an order for the membership package (track revenue)
     if (packageDetails.price > 0) {
       const orderId = `membership_${userRecord.uid}_${Date.now()}`;
       const orderData = {
@@ -122,7 +112,6 @@ export const addNewMember = async (req, res) => {
   }
 };
 
-// Get all members (Admin only)
 export const getAllMembers = async (req, res) => {
   try {
     const membersSnapshot = await db.collection("members").get();
@@ -146,7 +135,6 @@ export const getAllMembers = async (req, res) => {
   }
 };
 
-// Update member (Admin only)
 export const updateMember = async (req, res) => {
   const { memberId } = req.params;
   const { name, packageType, status } = req.body;
@@ -171,15 +159,13 @@ export const updateMember = async (req, res) => {
   }
 };
 
-// Delete member (Admin only)
 export const deleteMember = async (req, res) => {
   const { memberId } = req.params;
 
   try {
-    // Delete from Firestore
+    
     await db.collection("members").doc(memberId).delete();
     
-    // Delete from Firebase Auth
     await auth.deleteUser(memberId);
 
     res.status(200).json({
@@ -191,7 +177,7 @@ export const deleteMember = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-// Renew membership (Admin only)
+
 export const renewMembership = async (req, res) => {
   const { memberId } = req.params;
   const { packageType } = req.body;
@@ -201,7 +187,6 @@ export const renewMembership = async (req, res) => {
       return res.status(400).json({ error: "Package type is required" });
     }
 
-    // Get member data for order creation
     const memberSnapshot = await db.collection("members").doc(memberId).get();
     if (!memberSnapshot.exists) {
       return res.status(404).json({ error: "Member not found" });
@@ -209,11 +194,9 @@ export const renewMembership = async (req, res) => {
 
     const memberData = memberSnapshot.data();
 
-    // Calculate new expiry date and get package details
     const expiryDate = calculateExpiryDate(packageType);
     const packageDetails = getPackageDetails(packageType);
 
-    // Update member
     await db.collection("members").doc(memberId).update({
       packageType,
       expiryDate: expiryDate.toISOString(),
@@ -221,7 +204,6 @@ export const renewMembership = async (req, res) => {
       updatedAt: new Date().toISOString(),
     });
 
-    // Create an order for the renewal (track revenue)
     if (packageDetails.price > 0) {
       const orderId = `renewal_${memberId}_${Date.now()}`;
       const orderData = {
@@ -256,27 +238,23 @@ export const renewMembership = async (req, res) => {
   }
 };
 
-// Get admin stats for report
 export const getAdminStats = async (req, res) => {
   try {
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
 
-    // Get all members
     const membersSnapshot = await db.collection("members").get();
     const allMembers = membersSnapshot.docs.map(doc => ({
       ...doc.data(),
       uid: doc.id
     }));
 
-    // Count new members this month
     const newMembers = allMembers.filter(member => {
       const createdDate = new Date(member.createdAt);
       return createdDate >= startOfMonth && createdDate <= endOfMonth;
     }).length;
 
-    // Count renewed members this month (check updatedAt)
     const renewedMembers = allMembers.filter(member => {
       const updatedDate = new Date(member.updatedAt || member.createdAt);
       return updatedDate >= startOfMonth && updatedDate <= endOfMonth &&
@@ -284,17 +262,14 @@ export const getAdminStats = async (req, res) => {
              member.status === "active";
     }).length;
 
-    // Count expired members this month
     const expiredMembers = allMembers.filter(member => {
       if (!member.expiryDate) return false;
       const expiryDate = new Date(member.expiryDate);
       return expiryDate >= startOfMonth && expiryDate <= endOfMonth;
     }).length;
 
-    // Total active members
     const totalActiveMembers = allMembers.filter(m => m.status === "active").length;
 
-    // Get all orders this month
     const ordersSnapshot = await db.collection("orders").get();
     
     let totalOrders = 0;
@@ -310,7 +285,6 @@ export const getAdminStats = async (req, res) => {
       }
     });
 
-    // Ensure totalRevenue is a number and round to 2 decimal places
     totalRevenue = parseFloat(totalRevenue.toFixed(2));
 
     res.status(200).json({
